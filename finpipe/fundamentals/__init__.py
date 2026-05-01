@@ -1,41 +1,29 @@
-"""Fundamentals — stock categories as direct submodules (e.g. ``finpipe.fundamentals.earnings``).
+"""Fundamentals — five grouping functions, each returning an object with methods.
 
-Financial statement **displays**: ``finpipe.fundamentals.financials`` (income, balance, cashflow, …).
+Public API:
 
-Top-level **dispatch**: ``from finpipe.fundamentals import show, showOverview`` — ``show(ticker, section=…)`` routes to
-each submodule’s ``show``; ``showOverview`` lists coverage (there is no single “dump everything” yet).
+- ``getFinancials(ticker)``  — what the company **reports** (statements, ratios, earnings, …)
+- ``getMarketData(ticker)``  — what the market **observes** (price, shares, risk)
+- ``getFiling(ticker)``      — raw access over SEC EDGAR (all form types)
+- ``getDerived(ticker)``     — computed-only (EV, WACC, ROIC, …); no fetching
+- ``getCompany(ticker)``     — static / slowly-changing context (profile, analyst, credit)
 
-Crypto-specific fundamentals can live in a separate top-level package later.
+All methods return ``pd.DataFrame`` or ``dict``; provider-specific objects never surface.
+Provider complexity, fallback, and rate limiting are handled by ``finpipe.core``.
 """
 
-from . import analyst
-from . import dividends_splits
-from . import earnings
-from . import esg
-from . import filings
-from . import financial_statements
-from . import financials
-from . import insider
-from . import institutional
-from . import profile
-from . import short_interest
-from . import valuation_ratios
-from .show import FundamentalsSection, show, showOverview
+from __future__ import annotations
+
+from .company import getCompany
+from .derived import getDerived
+from .filings import getFiling
+from .financials import getFinancials
+from .marketData import getMarketData
 
 __all__ = [
-    "FundamentalsSection",
-    "analyst",
-    "dividends_splits",
-    "earnings",
-    "esg",
-    "filings",
-    "financial_statements",
-    "financials",
-    "insider",
-    "institutional",
-    "profile",
-    "short_interest",
-    "valuation_ratios",
-    "show",
-    "showOverview",
+    "getCompany",
+    "getDerived",
+    "getFiling",
+    "getFinancials",
+    "getMarketData",
 ]

@@ -1,8 +1,10 @@
-"""Display helpers — Rich formatters (internal; prefer ``fundamentals.financials.*.showXxx``)."""
+"""Display helpers — Rich renderers. Pure (no network)."""
 
-from .edgar import StatementKind, show_statement
+from .display import display
+from .edgar import StatementKind, renderStatement
 
 __all__ = [
+    "display",
     "StatementKind",
-    "show_statement",
+    "renderStatement",
 ]

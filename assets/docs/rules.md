@@ -1,6 +1,6 @@
 # finpipe — project rules
 
-Conventions for this repository. **Flow, pipelines, and fallback design** live in [`architecture.md`](architecture.md).
+Conventions for this repository. **Flow, pipelines, and fallback design** live in [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ## Naming
 
@@ -22,7 +22,7 @@ Notes:
 - **Top-level domains** are **broad categories**: `fundamentals`, `technicals`, `core`, `providers`, `displays`, etc.
 - **Submodules** split by **feature / dataset**, similar to common libraries (e.g. EdgarTools-style `financials.*` → our `fundamentals.financials.income`, `fundamentals.financials.balance`, …).
 - **Providers** stay isolated under `finpipe.providers` (one adapter per vendor / integration).
-- **Rendering / printing** (Rich, tables) is implemented under `finpipe.displays` but **users should not import `displays` by default** — use `fundamentals.show(ticker, section=…)` (dispatch), `fundamentals.showOverview(ticker)` (what’s available), `fundamentals.financials.show(ticker, kind)`, or per-file `show` on each fundamentals submodule (e.g. `earnings.show`, `financials.income.show`). `StatementKind` is re-exported from `fundamentals.financials`.
+- **Rendering / printing** (Rich, tables) is implemented under `finpipe.displays`. Public display surface is `display(obj)` from `finpipe.displays`, which routes to type-specific renderers (for example, `edgar.py` for `edgartools.Financials`) and falls back to `Console.print` for generic objects.
 
 ## Imports (public API)
 
@@ -35,11 +35,11 @@ finpipe.technicals.ohlcv_historical
 finpipe.core.chains
 ```
 
-`finpipe.displays` exists for shared render code and tests; normal apps import **fundamentals / technicals** and call `show*` or `get*` there.
+`finpipe.displays` exists for shared render code and tests; normal apps can import domain methods (`get*`) and pass results to `display(obj)` when they want formatted output.
 
 Add deeper nesting only when a category naturally splits (e.g. `fundamentals.filings.sec` later), not for one-off helpers.
 
 ## Docs
 
-- **`rules.md`** (this file): naming + layout conventions.
-- **`architecture.md`**: data flow, hierarchy, fallback chains, and how layers connect.
+- **`RULES.md`** (this file): naming + layout conventions.
+- **`ARCHITECTURE.md`**: data flow, hierarchy, fallback chains, and how layers connect.
